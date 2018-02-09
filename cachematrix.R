@@ -1,15 +1,34 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Creating functions that creates a list a functions that will inverse the matrix from cache
 
-## Write a short comment describing this function
 
-makeCacheMatrix <- function(x = matrix()) {
+makeCacheMatrix <- function(x = matrix()) { ##creates function the function list that the cashSolve, instead of solve i used ginv from the MASS library
+  s <- NULL
+  set <- function(y) {
+    x <<- y
+    s <<- NULL
+  }
+  get <- function() x
+  setinverse <- function(ginv) s <<- ginv
+  getinverse <- function() s
+  list(set = set, get = get,
+         setinverse = setinverse,
+         getinverse = getinverse)
 
 }
 
-
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve <- function(x, ...) { ## gets the inverse of the matrix
+  s <- x$getinverse()
+  if(!is.null(s)) {
+    message("getting cached data")
+    return(s)
+  }
+  data <- x$get()
+  s <- ginv(data, ...)
+  x$setinverse(s)
+  s
+  
 }
+
+
+
+
